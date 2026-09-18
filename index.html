@@ -70,7 +70,7 @@ canvas{display:block;width:100%;border-radius:8px;border:1px solid #222;margin-t
   <div class="key-title">Key Configuration</div>
 
   <div class="row">
-    <label>Cube layout (27 letters + space):</label>
+    <label>Cube layout (26 letters + space):</label>
     <button onclick="randomCube()">Randomise</button>
     <button onclick="resetCube()">Reset</button>
     <button onclick="applyCubeInput()">Apply</button>
@@ -118,7 +118,7 @@ canvas{display:block;width:100%;border-radius:8px;border:1px solid #222;margin-t
 
 <div class="section">
   <div class="row" style="flex-direction:column;align-items:stretch;">
-    <label>Message:</label>
+    <label>Message:</label><span style="font-size:11px;color:#555;margin-left:8px;">lowercase letters and space only</span>
     <textarea id="msg-input" rows="4" placeholder="type a message..." style="width:100%;vertical-align:top;"></textarea>
     <button class="primary" onclick="encodeMessage()" style="vertical-align:top;">Encode</button>
   </div>
@@ -259,9 +259,12 @@ function gf5ToPoint(ga,gb,ax){
 
 // ── ENCODE ───────────────────────────────────────────────────
 function encodeAll(msg,layout,axes,step,dir){
+  msg=String(msg);
   const result=[];
   let lay=[...layout],ax=[...axes];
-  for(const ch of msg.toLowerCase()){
+  // Convert underscore to space (underscore is display representation of space)
+  msg=msg.toLowerCase().replace(/_/g,' ');
+  for(const ch of msg){
     const{cube}=buildCube(lay);
     if(!(ch in cube)){
       result.push({ch,skip:true,token:'['+ch+']',axes:[...ax],layout:[...lay],pos:0,rot:0,dsum:0});
